@@ -1,4 +1,71 @@
 const game = {
+
+    mode: 'intro',
+
+    slingshotX: 140,
+    slingshotY: 280,
+
+    slingShotBandX: 140 + 55,
+    slingShotBandY: 280 + 23,
+
+    ended: false,
+
+    score: 0,
+
+    offsetLeft: 0,
+
+    start: function () {
+
+        game.hideScreens();
+
+        game.showScreen('gameScreen');
+        game.showScreen('scoreScreen');
+
+        game.mode = 'intro';
+        game.currentHero = undefined;
+
+        game.offsetLeft = 0;
+        game.ended = false;
+
+        game.animationFrame = window.requestAnimationFrame(game.animate, game.canvas);
+
+    },
+
+    handleGameLogic: function () {
+        //placeholder code.
+        game.offsetLeft++;
+    },
+
+    animate: function () {
+        game.handleGameLogic();
+
+        game.context.drawImage(
+            game.currentLevel.backgroundImage,
+            game.offsetLeft / 4, 0, 
+            game.canvas.width, game.canvas.height,
+            0, 0, 
+            game.canvas.width, game.canvas.height
+        );
+
+        game.context.drawImage(
+            game.currentLevel.foregroundImage,
+            game.offsetLeft, 0,
+            game.canvas.width, game.canvas.height,
+            0, 0,
+            game.canvas.width, game.canvas.height
+        );
+
+        game.context.drawImage(game.slingshotImage, game.slingshotX - game.offsetLeft, game.slingshotY);
+
+        game.context.drawImage(game.slingshotFrontImage, game.slingshotX - game.offsetLeft, game.slingshotY);
+
+        if(!game.ended){
+            game.animationFrame = window.requestAnimationFrame(game.animate, game.canvas);
+        }
+
+    },
+
+
     init: function () {
         game.canvas = document.getElementById('gameCanvas');
         game.context = game.canvas.getContext('2d');
@@ -33,7 +100,7 @@ const game = {
         game.showScreen('levelSelectScreen');
     },
 
-    start: function(){
+    start: function () {
         console.log('game started!');
     }
 
@@ -72,7 +139,7 @@ const levels = {
 
     load: function (number) {
 
-        game.currentLevel = {number : number};
+        game.currentLevel = { number: number };
         game.score = 0;
         document.getElementById('score').innerHTML = 'Score: ' + game.score;
         let level = levels.data[number];
@@ -80,7 +147,7 @@ const levels = {
         game.currentLevel.backgroundImage = loader.loadImage('./images/backgrounds/' + level.background + '.png');
         game.currentLevel.foregroundImage = loader.loadImage('./images/backgrounds/' + level.foreground + '.png');
 
-        game.slingshotImage = loader.loadImage('./images/slingshot.png'); 
+        game.slingshotImage = loader.loadImage('./images/slingshot.png');
         game.slingshotFrontImage = loader.loadImage('./images/slingshot-front.png');
 
         loader.onload = game.start;
@@ -112,7 +179,7 @@ const loader = {
         game.showScreen('loadingScreen');
         let image = new Image();
         image.addEventListener('load', loader.itemLoaded, false);
-        image.src = src;
+        image.src = url;
         return image;
     },
 
@@ -137,17 +204,17 @@ const loader = {
             + loader.loadedCount
             + ' Of ' + loader.totalCount;
 
-        if(loader.loadedCount === loader.totalCount){
+        if (loader.loadedCount === loader.totalCount) {
             loader.loaded = true;
             load.loadedCount = 0;
             loader.totalCount = 0;
             game.hideScreen('loadingScreen');
 
-            if(loader.onload){
+            if (loader.onload) {
                 loader.onload();
                 loader.onload = undefined;
             }
-        }    
+        }
 
     }
 

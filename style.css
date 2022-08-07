@@ -65,4 +65,24 @@ body{
     font: 12px Arial;
 }
 
+#scoreScreen{
+    height: 60px;
+    font: 32px "Comic Sans MS";
+    text-shadow: 0 0 2px black;
+    color: white;
+}
 
+#scoreScreen img{
+    opacity: 0.6;
+    top: 5%;
+    left: 5%;
+    position: relative;
+    padding: 8px;
+    cursor: pointer;
+}
+
+#score{
+    position: absolute;
+    top: 5%;
+    right: 5%;
+}
